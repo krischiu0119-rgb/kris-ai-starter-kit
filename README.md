@@ -1,329 +1,125 @@
-<!-- 2026-05-19 -->
+<!-- 2026-05-25 -->
 # Kris's AI Starter Kit
 
-> A progressive framework for structured AI-assisted development — from beginner to fully autonomous.
+> Install it. Your AI development practices improve immediately.
 
-A drop-in framework for structured AI-assisted development using sub-agents (Planner/Executor/Reviewer pattern), 3-layer QA, and automated housekeeping. Works with **Kiro IDE**, **Claude Code**, and **Claude CoWork**.
+A drop-in framework for structured AI-assisted development. Gives your AI agent consistent behavior, quality gates, and a delegation workflow that actually works.
 
-> **Formerly "Claude Cowork Starter Kit"** — renamed because this kit works across all AI coding tools, not just CoWork.
-
----
-
-## 🧭 Before You Start: Explore the Ecosystem
-
-Even if you don't use this kit, these repos offer excellent alternative approaches:
-
-| Repo | Stars | Focus | Best For |
-|------|-------|-------|----------|
-| [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) | 47k+ | From vibe coding to agentic engineering | Comprehensive CLAUDE.md patterns |
-| [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | 14.8k+ | Curated commands, files, workflows | Discovery & reference |
-| [SuperClaude-Org/SuperClaude_Framework](https://github.com/SuperClaude-Org/SuperClaude_Framework) | — | Cognitive personas + specialized commands | Power users who want slash commands |
-| [anthropics/skills](https://github.com/anthropics/skills) | Official | Anthropic's public Agent Skills | Official skill patterns |
-| [josix/awesome-claude-md](https://github.com/josix/awesome-claude-md) | — | Exemplary CLAUDE.md files from real projects | Learning by example |
-| [gsd-build/get-shit-done](https://github.com/gsd-build/get-shit-done) | — | Lightweight meta-prompting + spec-driven dev | Minimalists |
-| [mksglu/context-mode](https://github.com/mksglu/context-mode) | — | Saves 98% context window via FTS5 indexing | Token-constrained users |
-
-### Related: Private Configuration Repo
-
-For the author's personal (de-identified) steering files, hooks, and accumulated learnings:
-→ [krischiu0119-rgb/dotpilot](https://github.com/krischiu0119-rgb/dotpilot)
+Works with **Kiro IDE**, **Claude Code**, and **Claude CoWork**.
 
 ---
 
-## 🎯 Who Is This For?
+## 📦 What's Inside
 
-Teams using **Kiro IDE**, **Claude Code**, or **Claude CoWork** who want:
-- Consistent agent behavior across multiple projects
-- Structured delegation (no more 500-line single-agent chaos)
-- Automated quality gates that catch issues before deploy
-- A shared workflow that works regardless of which AI tool team members prefer
+| Component | What It Does | Level |
+|-----------|-------------|-------|
+| **AGENTS.md** | Cross-platform agent workflow rules (Planner → Executor → Reviewer) | 🟢 Core |
+| **Steering files** | Persistent instructions that shape agent behavior every session | 🟢 Core |
+| **Hooks** | Automated triggers (QA after edits, audit logging, deploy verification) | 🔵 Optional |
+| **Templates** | Blank AGENTS.md, FILE_MAP.md, PROJECT_BRIEF.md to fill in | 🟢 Core |
+| **Privacy rules** | Guardrails to prevent leaking secrets or PII | 🔵 Optional |
+| **Database safety** | Rules preventing destructive migrations | 🔵 Optional |
+| **Sub-agent workflow** | Full delegation protocol with convergence rules | ⚪ Advanced |
+| **Examples** | Filled-in example for a Python FastAPI project | 🟢 Core |
 
-### Budget Considerations
-
-| Your Plan | Monthly Budget | Recommended Approach |
-|-----------|---------------|---------------------|
-| Free / Pro | $20-50 | Phase 1 only. Human-in-the-loop. Context Mode essential. |
-| Team | $50-100 | Phase 1-2. Selective sub-agents. |
-| Enterprise / Max | $100+ | Full Phase 1-3. Autonomous agents OK. |
-| Unlimited (Kiro/internal) | No limit | Everything enabled from Day 1. |
+**Legend:** 🟢 Core (everyone should use) · 🔵 Optional (use if relevant) · ⚪ Advanced (power users)
 
 ---
 
-## 📦 Recommended Plugins & Skills
+## 🚀 Get Started
 
-Install these progressively based on your comfort level and budget:
+Two paths. Pick one.
 
-### Day 1 — Essential (saves tokens, zero risk)
+### Quick Start (2 minutes)
 
-```bash
-# Context Mode — reduces context consumption by up to 98%
-/plugin marketplace add mksglu/context-mode
-/plugin install context-mode@context-mode
-```
-
-### Week 2-3 — Core Skills (moderate token cost)
-
-```bash
-# Superpowers — TDD, debugging, brainstorming, subagent dev + code review
-/plugin install superpowers@claude-plugins-official
-
-# Get Shit Done — lightweight spec-driven development
-npx get-shit-done-cc --claude --global
-```
-
-### Week 4+ — Advanced (higher token cost, for experienced users)
-
-```bash
-# Skill Creator — teach Claude to auto-create new skills
-/plugin install skill-creator@claude-plugins-official
-
-# Claude Mem — cross-session memory
-/plugin marketplace add thedotmack/claude-mem
-/plugin install claude-mem
-
-# Frontend Design — frontend-specific patterns (alternative to Open Design)
-/plugin install frontend-design@claude-plugins-official
-```
-
-### Design System Options
-
-| System | Best For | Control Level |
-|--------|----------|---------------|
-| **Open Design** (default) | HTML reports, decks, one-pagers, landing pages | Full (you own the tokens) |
-| **Frontend Design Plugin** | React/Vue component development | Anthropic-managed |
-
-Both can coexist. Use Open Design for documents, Frontend Design for app UI.
-
----
-
-## 🚀 Progressive Learning Path
-
-**Don't enable everything on Day 1.** Follow this path:
-
-### Phase 1: Observer Mode (Week 1-2) — YOU are the Orchestrator
-
-```
-You: Break tasks yourself, write prompts yourself
-Agent: Only executes single tasks (Executor role)
-You: Review all results personally
-
-Goal: Understand agent capabilities and limitations
-Token cost: Low (~$5-15/week)
-```
-
-**What to do:**
-- Use plan mode before coding
-- Give specific, scoped prompts (one file, one feature)
-- Read every line the agent produces
-- Correct mistakes immediately — learn what confuses it
-
-### Phase 2: Co-Pilot Mode (Week 3-4) — Shared responsibility
-
-```
-You: High-level direction + final review
-Agent: Plans + executes + self-checks (Executor + Self-Challenge)
-You: Only intervene on quality issues
-
-Goal: Build trust in agent's self-checking ability
-Token cost: Medium (~$15-40/week)
-```
-
-**What to do:**
-- Enable Executor Self-Challenge
-- Let agent propose plans (but you approve before execution)
-- Start using sub-agents for research/investigation
-- Install Superpowers for structured development patterns
-
-### Phase 3: Delegation Mode (Week 5+) — Agent-driven
-
-```
-You: Strategic decisions only
-Agent: Full Planner → Executor → Reviewer pipeline
-You: Only engage on ESCALATE_TO_USER
-
-Goal: Fully autonomous development with safety rails
-Token cost: High (~$40-100+/week)
-```
-
-**What to do:**
-- Enable full sub-agent architecture
-- Enable /goal or loop patterns (if your tool supports it)
-- Trust the Reviewer to catch issues
-- Focus on architecture and product decisions
-
----
-
-## 5-Minute Setup
-
-### Option A: Claude Code Users (Easiest — paste one prompt)
-
-Copy the entire prompt below and paste it into your Claude Code conversation. It will set everything up automatically:
-
-```
-I want to adopt an AI agent workflow framework into this project.
-
-Please fetch the framework content from this GitHub repo:
-https://github.com/krischiu0119-rgb/ai-starter-kit
-
-Then execute these steps:
-
-1. Use fetch or GitHub API to read all files in the repo's claude-code/ folder
-2. Write claude-code/CLAUDE.md to my project root as CLAUDE.md
-3. Write all .md files from claude-code/.claude/rules/ to my project's .claude/rules/ directory
-4. Read AGENTS.md from the repo root and write it to my project root
-5. Analyze my current project structure, then:
-   - Generate a FILE_MAP.md (documenting each important file's location and purpose)
-   - Generate a PROJECT_BRIEF.md (project summary so sub-agents can quickly understand the project)
-6. Replace all [PLACEHOLDER] values (like [BUILD_COMMAND], [PROJECT_NAME], etc.) in AGENTS.md and CLAUDE.md with my project's actual values
-7. Create a temporary/ folder (if it doesn't exist)
-8. Create an audit_log.md (if it doesn't exist)
-
-When done, give me a summary: what you did, which files were changed, and how to start using the framework.
-```
-
-**That's it!** Claude will complete all setup automatically.
-
----
-
-### Option B: Kiro IDE Users (Same simplicity)
-
-Paste this prompt into Kiro's chat:
+Paste this prompt into your AI tool (Kiro, Claude Code, or CoWork):
 
 ```
 I want to adopt an AI agent workflow framework.
 
-Please fetch the framework content from this GitHub repo:
-https://github.com/krischiu0119-rgb/ai-starter-kit
+Fetch the content from: https://github.com/krischiu0119-rgb/kris-ai-starter-kit
 
-Then execute these steps:
+Then:
+1. Read the repo structure and identify which files apply to my tool (Kiro → kiro/ folder, Claude Code → claude-code/ folder)
+2. Copy the relevant steering/rules files into my project
+3. Copy AGENTS.md to my project root
+4. Analyze my project and generate FILE_MAP.md + PROJECT_BRIEF.md
+5. Replace all [PLACEHOLDER] values with my project's actual info
+6. Create temporary/ and audit_log.md if they don't exist
 
-1. Use fetch or GitHub API to read all files in the repo's kiro/ folder
-2. Write all .md files from kiro/steering/ to my project's .kiro/steering/ directory
-3. Write all .kiro.hook files from kiro/hooks/ to my project's .kiro/hooks/ directory
-4. Read AGENTS.md from the repo root and write it to my project root
-5. Analyze my current project structure, then:
-   - Generate a FILE_MAP.md (documenting each important file's location and purpose)
-   - Generate a PROJECT_BRIEF.md (project summary so sub-agents can quickly understand the project)
-6. Replace all [PLACEHOLDER] values with my project's actual values
-7. Create a temporary/ folder (if it doesn't exist)
-8. Create an audit_log.md (if it doesn't exist)
-
-When done, give me a summary: what you did, which files were changed, and how to start using the framework.
+Give me a summary when done.
 ```
 
----
+That's it. The agent handles the rest.
 
-### Option C: Manual Installation (For full control)
+### Full Setup (10 minutes)
+
+For full control over what gets installed:
 
 ```bash
-# 1. Clone this repo
-git clone https://github.com/krischiu0119-rgb/ai-starter-kit.git
+# Clone
+git clone https://github.com/krischiu0119-rgb/kris-ai-starter-kit.git
+cd kris-ai-starter-kit
 
-# 2. Navigate to your project directory
-cd your-project
+# For Kiro IDE users:
+cp -r kiro/ /path/to/your-project/.kiro/
+cp AGENTS.md /path/to/your-project/
 
-# 3a. If you use Claude Code:
-cp ../ai-starter-kit/claude-code/CLAUDE.md .
-cp -r ../ai-starter-kit/claude-code/.claude/ .
-cp ../ai-starter-kit/AGENTS.md .
-
-# 3b. If you use Kiro IDE:
-cp -r ../ai-starter-kit/kiro/ .kiro/
-cp ../ai-starter-kit/AGENTS.md .
-
-# 4. Edit AGENTS.md — replace all [PLACEHOLDER] values with your project info
-# 5. Create FILE_MAP.md (see templates/FILE_MAP.template.md for reference)
-# 6. Start using it!
+# For Claude Code users:
+cp claude-code/CLAUDE.md /path/to/your-project/
+cp -r claude-code/.claude/ /path/to/your-project/
+cp AGENTS.md /path/to/your-project/
 ```
+
+Then customize:
+1. Edit `AGENTS.md` — replace all `[PLACEHOLDER]` values
+2. Create `FILE_MAP.md` using `templates/FILE_MAP.template.md`
+3. Create `PROJECT_BRIEF.md` using `templates/PROJECT_BRIEF.template.md`
+4. Review hooks in `.kiro/hooks/` — disable any you don't need
 
 ---
 
-## How to Use After Setup
+## ⚙️ Variables to Customize
 
-Once setup is complete, start every new work session by telling the agent:
+After installation, find and replace these placeholders:
 
-```
-Read AGENTS.md and understand the workflow. Today's task is: [your task here]
-```
+| Variable | Where | Example |
+|----------|-------|---------|
+| `[PROJECT_NAME]` | AGENTS.md | `my-saas-app` |
+| `[TECH_STACK]` | AGENTS.md | `Next.js + Supabase + Tailwind` |
+| `[BUILD_COMMAND]` | AGENTS.md, steering files | `pnpm build` |
+| `[TEST_COMMAND]` | AGENTS.md, QA hooks | `pytest` or `vitest --run` |
+| `[DEPLOY_PLATFORM]` | AGENTS.md, deploy hook | `Vercel` / `AWS CDK` / `Railway` |
+| `[MAX_PARALLEL_AGENTS]` | AGENTS.md | `3` (default, adjust for RAM) |
 
-The agent will automatically adopt the **Planner → Executor → Reviewer** workflow:
-- Large tasks get broken into small chunks and processed in parallel
-- Each sub-task runs a build verification before reporting done
-- Files are never created in the wrong place (agents check FILE_MAP.md first)
-- Deployments are verified after every push
+**Steering files to activate/deactivate:**
+
+| File | Activate If... |
+|------|----------------|
+| `database-safety.md` | Your project has a database |
+| `deployment-verification.md` | You deploy to a live environment |
+| `code-execution-practices.md` | You want agents to use temp files instead of inline scripts |
+| `loop-until-success.md` | You want automated review loops |
+| `privacy-guard.md` | Your project handles sensitive data |
+| `subagent-workflow.md` | You want full Planner/Executor/Reviewer delegation |
+
+**Hooks to enable/disable:**
+
+| Hook | What It Does | Enable If... |
+|------|-------------|---------------|
+| `qa-post-edit.kiro.hook` | Runs QA after file edits | Always recommended |
+| `qa-full-audit.kiro.hook` | Deep QA before deploy | You deploy from this project |
+| `audit-log-writer.kiro.hook` | Logs completed work | You want traceability |
+| `housekeeping.kiro.hook` | Cleans temp files, checks FILE_MAP | Weekly maintenance |
+| `verify-deploy.kiro.hook` | Confirms deploy succeeded | You deploy to production |
 
 ---
 
-## 🔍 Resource Priority (for Agent behavior)
+## 🧭 How It Works
 
-When the agent looks for solutions, it follows this order:
+### Core Concept: Structured Delegation
 
-1. **LOCAL**: This project's own files (steering/, skills/, AGENTS.md)
-2. **STARTER KIT**: Patterns from this repo
-3. **CURATED**: Repos listed in the ecosystem table above
-4. **OFFICIAL DOCS**: Anthropic, framework docs
-5. **WEB SEARCH**: Only as last resort
-
-This ensures consistent behavior and avoids the agent recommending random internet solutions when a tested pattern already exists.
-
----
-
-## Quick Reference
-
-| I am... | What should I do? |
-|---------|-------------------|
-| **Claude Code user** | Copy the Option A prompt, paste into your conversation |
-| **Kiro IDE user** | Copy the Option B prompt, paste into your conversation |
-| **Manual setup preferred** | Follow Option C steps |
-| **Want to learn more** | Read [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) |
-| **Want to see examples** | Check the [examples/](./examples/) folder |
-| **Looking for the private version** | See [dotpilot](https://github.com/krischiu0119-rgb/dotpilot) |
-
-## Directory Structure
-
-```
-ai-starter-kit/
-├── AGENTS.md                  # Cross-platform source of truth (shared by all tools)
-├── MIGRATION_GUIDE.md         # Adoption guide for existing projects
-├── README.md                  # You are here
-│
-├── kiro/                      # For Kiro IDE users → copy to .kiro/
-│   ├── steering/
-│   │   ├── subagent-workflow.md
-│   │   ├── database-safety.md
-│   │   ├── deployment-verification.md
-│   │   └── code-execution-practices.md
-│   └── hooks/
-│       ├── audit-log-writer.kiro.hook
-│       ├── housekeeping.kiro.hook
-│       ├── qa-full-audit.kiro.hook
-│       ├── qa-post-edit.kiro.hook
-│       └── verify-deploy.kiro.hook
-│
-├── claude-code/               # For Claude Code users → copy to project root
-│   ├── CLAUDE.md
-│   └── .claude/
-│       └── rules/
-│           ├── workflow.md
-│           ├── database-safety.md
-│           ├── deployment-verification.md
-│           └── code-execution-practices.md
-│
-├── templates/                 # Blank templates to fill in
-│   ├── AGENTS.template.md
-│   ├── FILE_MAP.template.md
-│   ├── PROJECT_BRIEF.template.md
-│   └── audit_log.template.md
-│
-└── examples/                  # Filled-in examples for reference
-    └── minimal-project/       # Python FastAPI REST API example
-```
-
-## Key Concepts
-
-### Sub-Agent Workflow
-
-The main context is for **planning only**. All implementation is delegated to sub-agents:
+Instead of one long conversation doing everything, work is split:
 
 | Role | Responsibility |
 |------|---------------|
@@ -331,82 +127,110 @@ The main context is for **planning only**. All implementation is delegated to su
 | **Executor** | Implements one focused task, verifies with build |
 | **Reviewer** | Checks output quality, runs QA layers |
 
-### 3-Layer QA Strategy
+### 3-Layer QA
 
 | Layer | When | What |
 |-------|------|------|
-| **Smoke** | After every sub-agent task | Build passes, no type errors, basic functionality |
-| **Regression** | After feature complete | Run full test suite, check existing features unbroken |
-| **Full Audit** | Before deploy / end of batch | Deep check: edge cases, mobile, accessibility, security |
+| **Smoke** | After every task | Build passes, no type errors |
+| **Regression** | After feature complete | Full test suite, nothing broken |
+| **Full Audit** | Before deploy | Edge cases, a11y, security |
 
-### Adaptive Stopping (Convergence Rules)
+### Safety Rails
 
-The review loop doesn't run forever:
-- **Default cap**: 5 iterations
-- **Early exit**: Reviewer approves → stop immediately
-- **Behavioral guardrails**: After iteration 2, agent cannot delete/recreate modules, change DB schema as a "fix", or install new dependencies
-- **Escalate to user**: Same issue found twice, agent stalls, or agent attempts destructive action
+- **Convergence rules**: Review loops cap at 5 iterations, escalate to user if stuck
+- **File placement**: Agents must check FILE_MAP.md before creating files
+- **Database safety**: Migrations are additive-only by default
+- **Deploy verification**: `git push` ≠ deployed — agents verify the live URL
 
-### Housekeeping Agent
+---
 
-Runs periodically (or on manual trigger) to:
-- Update `audit_log.md` with batch summaries
-- Clean up `temporary/` files older than 7 days
-- Verify `FILE_MAP.md` matches actual project structure
-- Flag TODOs that have been open > 2 weeks
+## 📚 Progressive Learning Path
 
-### File Placement Rules
+Don't enable everything on Day 1.
 
-Before creating any new file, agents **must** check `FILE_MAP.md` to determine the correct location. No guessing, no "I'll put it here for now."
+| Phase | You Do | Agent Does | Weekly Cost |
+|-------|--------|-----------|-------------|
+| **Week 1-2: Observer** | Break tasks, write prompts, review everything | Execute single tasks only | ~$5-15 |
+| **Week 3-4: Co-Pilot** | High-level direction + final review | Plan + execute + self-check | ~$15-40 |
+| **Week 5+: Delegation** | Strategic decisions only | Full Planner → Executor → Reviewer | ~$40-100+ |
 
-### Database Safety
+---
 
-- Migrations are **additive only** — never DROP columns/tables without explicit approval
-- All migrations go through `temporary/` first for review
-- Production data is sacred — never modify without backup
+## 🔗 Ecosystem & Alternatives
 
-### Deployment Verification
+This kit isn't the only option. These repos offer excellent approaches:
 
-`git push` ≠ deployed. After every deploy:
-1. Check deployment platform status (Vercel/AWS/Railway)
-2. Hit the live URL and verify response
-3. Confirm no rollback occurred
+| Repo | Focus | Best For |
+|------|-------|----------|
+| [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) | From vibe coding to agentic engineering | Comprehensive CLAUDE.md patterns |
+| [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | Curated commands, files, workflows | Discovery & reference |
+| [SuperClaude-Org/SuperClaude_Framework](https://github.com/SuperClaude-Org/SuperClaude_Framework) | Cognitive personas + slash commands | Power users |
+| [anthropics/skills](https://github.com/anthropics/skills) | Anthropic's official Agent Skills | Official patterns |
+| [gsd-build/get-shit-done](https://github.com/gsd-build/get-shit-done) | Lightweight meta-prompting | Minimalists |
+| [mksglu/context-mode](https://github.com/mksglu/context-mode) | Saves 98% context via FTS5 indexing | Token-constrained users |
 
-## Customization
+### Author's Private Config
 
-When adopting this kit, customize these for your project:
+For the author's personal (de-identified) steering files, hooks, and accumulated learnings from daily use:
+→ [krischiu0119-rgb/dotpilot](https://github.com/krischiu0119-rgb/dotpilot) — a private configuration repo containing real-world steering rules refined over months of AI-assisted development. Useful as a reference for what a mature setup looks like.
 
-| What to Change | Where | Example |
-|---------------|-------|---------|
-| Build command | AGENTS.md, steering files | `npm run build` → `pnpm build` |
-| Test command | QA steering files | `npm test` → `pytest` |
-| File structure | FILE_MAP_TEMPLATE.md | Add your app's directories |
-| Deploy target | deployment-verification | Vercel → AWS CDK |
-| Tech stack | AGENTS.md header | Next.js → Django + HTMX |
-| Max parallel agents | AGENTS.md | 3 → 5 (if 32GB+ RAM) |
+---
 
-## Resource Limits
+## 📁 Directory Structure
 
-Default configuration assumes:
-- **3 parallel sub-agents** (suitable for 16GB RAM machines)
-- Adjust in AGENTS.md if your machine has more/less capacity
-- Each sub-agent holds ~8K tokens of context
+```
+kris-ai-starter-kit/
+├── AGENTS.md                  # Cross-platform agent workflow (shared by all tools)
+├── MIGRATION_GUIDE.md         # Adoption guide for existing projects
+├── PRIVACY_RULES.md           # What's safe to include in public repos
+├── ROADMAP.md                 # Future direction
+├── README.md                  # You are here
+│
+├── kiro/                      # For Kiro IDE → copy to .kiro/
+│   ├── steering/              # Persistent agent instructions
+│   │   ├── subagent-workflow.md
+│   │   ├── database-safety.md
+│   │   ├── deployment-verification.md
+│   │   ├── code-execution-practices.md
+│   │   ├── code-quality.md
+│   │   ├── executor-prompt-template.md
+│   │   ├── loop-until-success.md
+│   │   ├── privacy-guard.md
+│   │   └── mcp-guide.md           # TODO: MCP configuration guide
+│   └── hooks/                 # Automated triggers
+│       ├── audit-log-writer.kiro.hook
+│       ├── housekeeping.kiro.hook
+│       ├── qa-full-audit.kiro.hook
+│       ├── qa-post-edit.kiro.hook
+│       └── verify-deploy.kiro.hook
+│
+├── claude-code/               # For Claude Code → copy to project root
+│   ├── CLAUDE.md
+│   └── .claude/rules/
+│
+├── templates/                 # Blank templates to customize
+│   ├── AGENTS.template.md
+│   ├── FILE_MAP.template.md
+│   ├── PROJECT_BRIEF.template.md
+│   └── audit_log.template.md
+│
+└── examples/                  # Filled-in examples
+    └── minimal-project/       # Python FastAPI example
+```
 
-| RAM | Recommended Max Agents |
-|-----|----------------------|
-| 8GB | 1-2 |
-| 16GB | 3 (default) |
-| 32GB+ | 4-5 |
+---
 
-## Compatibility
+## 🔧 Compatibility
 
-| Tool | Support Level | Notes |
-|------|--------------|-------|
-| **Kiro IDE** | ✅ Full | Steering files + hooks |
-| **Claude Code** | ✅ Full | CLAUDE.md + .claude/rules/ + skills + plugins |
+| Tool | Support | Notes |
+|------|---------|-------|
+| **Kiro IDE** | ✅ Full | Steering + hooks + specs |
+| **Claude Code** | ✅ Full | CLAUDE.md + .claude/rules/ |
 | **Claude CoWork** | ✅ Full | Uses AGENTS.md directly |
 | **Cursor** | ⚠️ Partial | AGENTS.md works, no hooks |
 | **Windsurf** | ⚠️ Partial | AGENTS.md works, no hooks |
+
+---
 
 ## Contributing
 
